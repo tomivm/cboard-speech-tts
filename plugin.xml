@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" id="phonegap-plugin-speech-synthesis" version="0.1.1">
-  <name>SpeechSynthesis</name>
-  <description>Cordova Speech Synthesis Plugin</description>
-  <license>MIT</license>
-  <keywords>cordova,speech,synthesis,tts</keywords>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="cordova-plugin-cboard-speech-tts" version="0.0.1">
+  <name>cboard-speech-tts</name>
+  <description>Cordova TTS plugin used by the Cboard mobile app</description>
+  <license>GPL-3.0-only</license>
+  <keywords>cordova,cboard,speech,synthesis,tts</keywords>
+  
+  <!-- android -->
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
-      <feature name="SpeechSynthesis">
+      <feature name="cboard-speech-tts">
         <param name="android-package" value="org.apache.cordova.speech.SpeechSynthesis"/>
       </feature>
     </config-file>
