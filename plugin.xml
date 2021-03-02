@@ -8,7 +8,7 @@
   <!-- android -->
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
-      <feature name="cboard-speech-tts">
+      <feature name="SpeechSynthesis">
         <param name="android-package" value="org.apache.cordova.speech.SpeechSynthesis"/>
       </feature>
     </config-file>
