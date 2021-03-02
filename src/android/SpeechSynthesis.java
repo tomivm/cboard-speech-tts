@@ -1,30 +1,30 @@
 package org.apache.cordova.speech;
 
-import android.os.Build;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.TextToSpeech.EngineInfo;
-import android.speech.tts.TextToSpeech.OnInitListener;
-import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
-import android.speech.tts.Voice;
-import android.util.Log;
-import java.util.AbstractList;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.AbstractList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.PluginResult;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SpeechSynthesis
-    extends CordovaPlugin
-    implements OnInitListener, OnUtteranceCompletedListener {
+import android.os.Build;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
+import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
+import android.speech.tts.Voice;
+import android.util.Log;
+
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
+
+public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, OnUtteranceCompletedListener {
 
     private static final String LOG_TAG = "TTS";
     private static final int STOPPED = 0;
@@ -40,11 +40,7 @@ public class SpeechSynthesis
     //private String startupCallbackId = "";
 
     @Override
-    public boolean execute(
-        String action,
-        JSONArray args,
-        CallbackContext callbackContext
-    ) {
+    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
         PluginResult.Status status = PluginResult.Status.OK;
         String result = "";
         this.callbackContext = callbackContext;
@@ -64,10 +60,7 @@ public class SpeechSynthesis
                         voiceCode = voice.optString("voiceURI", null);
                     }
                 }
-                if (
-                    voiceCode != null &&
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                ) {
+                if (voiceCode != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     for (Voice v : this.voiceList) {
                         if (voiceCode.equals(v.getName())) {
                             mTts.setVoice(v);
@@ -76,31 +69,25 @@ public class SpeechSynthesis
                     }
                 }
 
-                float pitch = (float) utterance.optDouble("pitch", 1.0);
+                float pitch = (float)utterance.optDouble("pitch", 1.0);
                 mTts.setPitch(pitch);
 
-                float volume = (float) utterance.optDouble("volume", 0.5);
+                float volume = (float)utterance.optDouble("volume", 0.5);
                 // how to set volume
-
-                float rate = (float) utterance.optDouble("rate", 1.0);
+                
+                float rate = (float)utterance.optDouble("rate", 1.0);
                 mTts.setSpeechRate(rate);
-
+                
                 if (isReady()) {
                     HashMap<String, String> map = null;
                     map = new HashMap<String, String>();
-                    map.put(
-                        TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,
-                        callbackContext.getCallbackId()
-                    );
+                    map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, callbackContext.getCallbackId());
                     JSONObject event = new JSONObject();
-                    event.put("type", "start");
-                    event.put("charIndex", 0);
-                    event.put("elapsedTime", 0);
-                    event.put("name", "");
-                    PluginResult pr = new PluginResult(
-                        PluginResult.Status.OK,
-                        event
-                    );
+                    event.put("type","start");
+                    event.put("charIndex",0);
+                    event.put("elapsedTime",0);
+                    event.put("name","");
+                    PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
                     pr.setKeepCallback(true);
                     callbackContext.sendPluginResult(pr);
                     mTts.speak(text, TextToSpeech.QUEUE_ADD, map);
@@ -124,9 +111,7 @@ public class SpeechSynthesis
             } else if (action.equals("stop")) {
                 if (isReady()) {
                     mTts.stop();
-                    callbackContext.sendPluginResult(
-                        new PluginResult(status, result)
-                    );
+                    callbackContext.sendPluginResult(new PluginResult(status, result));
                 } else {
                     fireErrorEvent(callbackContext);
                 }
@@ -134,18 +119,9 @@ public class SpeechSynthesis
                 if (isReady()) {
                     HashMap<String, String> map = null;
                     map = new HashMap<String, String>();
-                    map.put(
-                        TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,
-                        callbackContext.getCallbackId()
-                    );
-                    mTts.playSilence(
-                        args.getLong(0),
-                        TextToSpeech.QUEUE_ADD,
-                        map
-                    );
-                    PluginResult pr = new PluginResult(
-                        PluginResult.Status.NO_RESULT
-                    );
+                    map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, callbackContext.getCallbackId());
+                    mTts.playSilence(args.getLong(0), TextToSpeech.QUEUE_ADD, map);
+                    PluginResult pr = new PluginResult(PluginResult.Status.NO_RESULT);
                     pr.setKeepCallback(true);
                     callbackContext.sendPluginResult(pr);
                 } else {
@@ -155,50 +131,34 @@ public class SpeechSynthesis
                 this.startupCallbackContext = callbackContext;
                 if (mTts == null) {
                     state = SpeechSynthesis.INITIALIZING;
-                    mTts =
-                        new TextToSpeech(
-                            cordova.getActivity().getApplicationContext(),
-                            this
-                        );
-                } else {
-                    getVoices(callbackContext);
+                    mTts = new TextToSpeech(cordova.getActivity().getApplicationContext(), this);
+                }else{
+            		getVoices(callbackContext);
                 }
-                PluginResult pluginResult = new PluginResult(
-                    status,
-                    SpeechSynthesis.INITIALIZING
-                );
+                PluginResult pluginResult = new PluginResult(status, SpeechSynthesis.INITIALIZING);
                 pluginResult.setKeepCallback(true);
                 startupCallbackContext.sendPluginResult(pluginResult);
-            } else if (action.equals("getEngines")) {
-                if (mTts != null) {
-                    List<EngineInfo> engineInfos = mTts.getEngines();
-                    result = engineInfos.toArrray();
-                    callbackContext.sendPluginResult(
-                        new PluginResult(status, result)
-                    );
-                }
-            } else if (action.equals("shutdown")) {
+            }
+
+			
+			
+            else if (action.equals("shutdown")) {
                 if (mTts != null) {
                     mTts.shutdown();
                 }
-                callbackContext.sendPluginResult(
-                    new PluginResult(status, result)
-                );
-            } else if (action.equals("isLanguageAvailable")) {
+                callbackContext.sendPluginResult(new PluginResult(status, result));
+            }
+            else if (action.equals("isLanguageAvailable")) {
                 if (mTts != null) {
                     Locale loc = new Locale(args.getString(0));
                     int available = mTts.isLanguageAvailable(loc);
                     result = (available < 0) ? "false" : "true";
-                    callbackContext.sendPluginResult(
-                        new PluginResult(status, result)
-                    );
+                    callbackContext.sendPluginResult(new PluginResult(status, result));
                 }
             }
             return true;
         } catch (JSONException e) {
-            callbackContext.sendPluginResult(
-                new PluginResult(PluginResult.Status.JSON_EXCEPTION)
-            );
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION));
         }
         return false;
     }
@@ -208,28 +168,17 @@ public class SpeechSynthesis
         JSONObject voice;
         //List<TextToSpeech.EngineInfo> engines = mTts.getEngines();
 
-        if (
-            android.os.Build.VERSION.SDK_INT >=
-            android.os.Build.VERSION_CODES.LOLLIPOP
-        ) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             this.voiceList = mTts.getVoices();
             for (Voice v : this.voiceList) {
                 Locale locale = v.getLocale();
                 voice = new JSONObject();
                 try {
                     voice.put("voiceURI", v.getName());
-                    voice.put(
-                        "name",
-                        locale.getDisplayLanguage(locale) +
-                        " " +
-                        locale.getDisplayCountry(locale)
-                    );
+                    voice.put("name", locale.getDisplayLanguage(locale) + " " + locale.getDisplayCountry(locale));
                     //voice.put("features", v.getFeatures());
                     //voice.put("displayName", locale.getDisplayLanguage(locale) + " " + locale.getDisplayCountry(locale));
-                    voice.put(
-                        "lang",
-                        locale.getLanguage() + "-" + locale.getCountry()
-                    );
+                    voice.put("lang", locale.getLanguage()+"-"+locale.getCountry());
                     voice.put("localService", !v.isNetworkConnectionRequired());
                     voice.put("quality", v.getQuality());
                     voice.put("default", false);
@@ -238,7 +187,7 @@ public class SpeechSynthesis
                 }
                 voices.put(voice);
             }
-        } else {
+        }else{
             //Iterator<Locale> list = voiceList.iterator();
             Locale[] list = Locale.getAvailableLocales();
             Locale locale;
@@ -247,22 +196,11 @@ public class SpeechSynthesis
             for (int i = 0; i < list.length; i++) {
                 locale = list[i];
                 voice = new JSONObject();
-                if (mTts.isLanguageAvailable(locale) > 0) { // ie LANG_COUNTRY_AVAILABLE or LANG_COUNTRY_VAR_AVAILABLE
+                if (mTts.isLanguageAvailable(locale) > 0) {     // ie LANG_COUNTRY_AVAILABLE or LANG_COUNTRY_VAR_AVAILABLE
                     try {
-                        voice.put(
-                            "voiceURI",
-                            locale.getLanguage() + "-" + locale.getCountry()
-                        );
-                        voice.put(
-                            "name",
-                            locale.getDisplayLanguage(locale) +
-                            " " +
-                            locale.getDisplayCountry(locale)
-                        );
-                        voice.put(
-                            "lang",
-                            locale.getLanguage() + "-" + locale.getCountry()
-                        );
+                        voice.put("voiceURI", locale.getLanguage()+"-"+locale.getCountry());
+                        voice.put("name", locale.getDisplayLanguage(locale) + " " + locale.getDisplayCountry(locale));
+                        voice.put("lang", locale.getLanguage()+"-"+locale.getCountry());
                         voice.put("localService", true);
                         voice.put("default", false);
                     } catch (JSONException e) {
@@ -281,7 +219,7 @@ public class SpeechSynthesis
     private void fireEndEvent(CallbackContext callbackContext) {
         JSONObject event = new JSONObject();
         try {
-            event.put("type", "end");
+            event.put("type","end");
         } catch (JSONException e) {
             // this will never happen
         }
@@ -291,15 +229,13 @@ public class SpeechSynthesis
     }
 
     private void fireErrorEvent(CallbackContext callbackContext)
-        throws JSONException {
+            throws JSONException {
         JSONObject error = new JSONObject();
-        error.put("type", "error");
-        error.put("charIndex", 0);
-        error.put("elapsedTime", 0);
-        error.put("name", "");
-        callbackContext.sendPluginResult(
-            new PluginResult(PluginResult.Status.ERROR, error)
-        );
+        error.put("type","error");
+        error.put("charIndex",0);
+        error.put("elapsedTime",0);
+        error.put("name","");
+        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, error));
     }
 
     /**
@@ -320,38 +256,38 @@ public class SpeechSynthesis
         if (mTts != null && status == TextToSpeech.SUCCESS) {
             state = SpeechSynthesis.STARTED;
             getVoices(this.startupCallbackContext);
-            //                Putting this code in hear as a place holder. When everything moves to API level 15 or greater
-            //                we'll switch over to this way of tracking progress.
-            //                mTts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-            //
-            //                    @Override
-            //                    public void onDone(String utteranceId) {
-            //                        Log.d(LOG_TAG, "got completed utterance");
-            //                        PluginResult result = new PluginResult(PluginResult.Status.OK);
-            //                        result.setKeepCallback(false);
-            //                        callbackContext.sendPluginResult(result);
-            //                    }
-            //
-            //                    @Override
-            //                    public void onError(String utteranceId) {
-            //                        Log.d(LOG_TAG, "got utterance error");
-            //                        PluginResult result = new PluginResult(PluginResult.Status.ERROR);
-            //                        result.setKeepCallback(false);
-            //                        callbackContext.sendPluginResult(result);
-            //                    }
-            //
-            //                    @Override
-            //                    public void onStart(String utteranceId) {
-            //                        Log.d(LOG_TAG, "started talking");
-            //                    }
-            //
-            //                });
-        } else if (status == TextToSpeech.ERROR) {
+            
+            
+//                Putting this code in hear as a place holder. When everything moves to API level 15 or greater
+//                we'll switch over to this way of tracking progress.
+//                mTts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+//
+//                    @Override
+//                    public void onDone(String utteranceId) {
+//                        Log.d(LOG_TAG, "got completed utterance");
+//                        PluginResult result = new PluginResult(PluginResult.Status.OK);
+//                        result.setKeepCallback(false);
+//                        callbackContext.sendPluginResult(result);        
+//                    }
+//
+//                    @Override
+//                    public void onError(String utteranceId) {
+//                        Log.d(LOG_TAG, "got utterance error");
+//                        PluginResult result = new PluginResult(PluginResult.Status.ERROR);
+//                        result.setKeepCallback(false);
+//                        callbackContext.sendPluginResult(result);        
+//                    }
+//
+//                    @Override
+//                    public void onStart(String utteranceId) {
+//                        Log.d(LOG_TAG, "started talking");
+//                    }
+//                    
+//                });
+        }
+        else if (status == TextToSpeech.ERROR) {
             state = SpeechSynthesis.STOPPED;
-            PluginResult result = new PluginResult(
-                PluginResult.Status.ERROR,
-                SpeechSynthesis.STOPPED
-            );
+            PluginResult result = new PluginResult(PluginResult.Status.ERROR, SpeechSynthesis.STOPPED);
             result.setKeepCallback(false);
             this.startupCallbackContext.sendPluginResult(result);
         }
