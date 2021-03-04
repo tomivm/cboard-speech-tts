@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import android.os.Build;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.EngineInfo;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.speech.tts.Voice;
@@ -163,7 +164,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
     private void getVoices(CallbackContext callbackContext) {
         JSONArray voices = new JSONArray();
         JSONObject voice;
-        // List<TextToSpeech.EngineInfo> engines = mTts.getEngines();
+        List<TextToSpeech.EngineInfo> engines = mTts.getEngines();
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             this.voiceList = mTts.getVoices();
