@@ -1,5 +1,6 @@
 
 var exec = require("cordova/exec");
+const SpeechSynthesisEngineList = require("./SpeechSynthesisEngineList");
 var SpeechSynthesisVoiceList = require("./SpeechSynthesisVoiceList");
 
 var SpeechSynthesis = function() {
@@ -7,9 +8,14 @@ var SpeechSynthesis = function() {
     this.speaking = false;
     this.paused = false;
     this._voices = null;
+    this._engines = null;
     var that = this;
     var successCallback = function(data) {
     	that._voices = new SpeechSynthesisVoiceList(data);
+		var successEnginesCallback = function(enginesData) {
+			that._engines = new SpeechSynthesisEngineList(enginesData);
+		};
+		exec(successEnginesCallback, null, "SpeechSynthesis", "getEngines", []);
     };
     exec(successCallback, null, "SpeechSynthesis", "startup", []);
 };
@@ -49,6 +55,10 @@ SpeechSynthesis.prototype.pause = function() {
 
 SpeechSynthesis.prototype.resume = function() {
     exec(null, null, "SpeechSynthesis", "resume", []);
+};
+
+SpeechSynthesis.prototype.getEngines = function() {
+	return this._engines;
 };
 
 SpeechSynthesis.prototype.getVoices = function() {

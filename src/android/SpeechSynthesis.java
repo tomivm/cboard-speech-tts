@@ -152,6 +152,24 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                     result = (available < 0) ? "false" : "true";
                     callbackContext.sendPluginResult(new PluginResult(status, result));
                 }
+            } else if (action.equals("getEngines")) {
+                if (mTts != null) {
+                    JSONArray engines = new JSONArray();
+                    JSONObject engine;
+                    List<TextToSpeech.EngineInfo> engineInfoList = mTts.getEngines();
+                    for (TextToSpeech.EngineInfo engineInfo : engineInfoList) {
+                        engine = new JSONObject();
+                        try {
+                            engine.put("name", engineInfo.name);
+                            engine.put("label", engineInfo.label);
+                            engine.put("icon", engineInfo.icon);
+                        } catch (JSONException e) {
+                            // should never happen
+                        }
+                        engines.put(engine);
+                    }
+                    callbackContext.sendPluginResult(new PluginResult(status, engines));
+                }
             }
             return true;
         } catch (JSONException e) {
