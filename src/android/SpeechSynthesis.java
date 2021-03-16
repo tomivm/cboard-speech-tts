@@ -158,7 +158,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                     List<TextToSpeech.EngineInfo> engineInfoList = mTts.getEngines();
                     String defaultEngine = mTts.getDefaultEngine();
                     for (TextToSpeech.EngineInfo engineInfo : engineInfoList) {
-                        if(engineInfo.name == defaultEngine) {
+                        if (engineInfo.name.equals(defaultEngine)) {
                             try {
                                 engine.put("name", engineInfo.name);
                                 engine.put("label", engineInfo.label);
@@ -199,7 +199,6 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
     private void getVoices(CallbackContext callbackContext) {
         JSONArray voices = new JSONArray();
         JSONObject voice;
-        List<TextToSpeech.EngineInfo> engines = mTts.getEngines();
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             this.voiceList = mTts.getVoices();
