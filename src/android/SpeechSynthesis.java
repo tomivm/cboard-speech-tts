@@ -138,9 +138,18 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                 PluginResult pluginResult = new PluginResult(status, SpeechSynthesis.INITIALIZING);
                 pluginResult.setKeepCallback(true);
                 startupCallbackContext.sendPluginResult(pluginResult);
-            }
-
-            else if (action.equals("shutdown")) {
+            } else if (action.equals("setEngine")) {
+                this.startupCallbackContext = callbackContext;
+                String engineName = args.getString(0);
+                state = SpeechSynthesis.INITIALIZING;
+                if (mTts != null) {
+                    this.onDestroy();
+                }
+                mTts = new TextToSpeech(cordova.getActivity().getApplicationContext(), this, engineName);
+                PluginResult pluginResult = new PluginResult(status, SpeechSynthesis.INITIALIZING);
+                pluginResult.setKeepCallback(true);
+                startupCallbackContext.sendPluginResult(pluginResult);
+            } else if (action.equals("shutdown")) {
                 if (mTts != null) {
                     mTts.shutdown();
                 }
