@@ -84,8 +84,10 @@ SpeechSynthesis.prototype.setEngine = function (engineName) {
 	var setEngineSuccessCallback = function (data) {
 		console.log(data);
 		this._voices = new SpeechSynthesisVoiceList(data);
+		console.log(this._voices);
 	}
 	exec(setEngineSuccessCallback, null, "SpeechSynthesis", "setEngine", [engineName]);
+	console.log(this._voices);
 };
 
 module.exports = new SpeechSynthesis();
