@@ -13,7 +13,7 @@ var SpeechSynthesis = function () {
 	this._engines = null;
 	var that = this;
 	var successCallback = function (data) {
-		console.log(data);
+		//console.log(data);
 		that._voices = new SpeechSynthesisVoiceList(data);
 
 		// get all engines 
