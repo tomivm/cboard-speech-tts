@@ -13,10 +13,7 @@ var SpeechSynthesis = function () {
 	this._engines = null;
 	var that = this;
 	var successCallback = function (data) {
-		console.log('succes callback ');
-		console.log(data);
 		that._voices = new SpeechSynthesisVoiceList(data);
-		console.log(this._voices);
 
 		// get all engines 
 		var successEnginesCallback = function (enginesData) {
@@ -86,12 +83,9 @@ SpeechSynthesis.prototype.getVoices = function () {
 SpeechSynthesis.prototype.setEngine = function (engineName) {
 	var that = this;
 	var setEngineSuccessCallback = function (data) {
-		console.log(data);
 		that._voices = new SpeechSynthesisVoiceList(data);
-		console.log(this._voices);
 	}
 	exec(setEngineSuccessCallback, null, "SpeechSynthesis", "setEngine", [engineName]);
-	console.log(this._voices);
 };
 
 module.exports = new SpeechSynthesis();
