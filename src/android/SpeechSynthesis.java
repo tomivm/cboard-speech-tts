@@ -37,6 +37,8 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
 
     private Set<Voice> voiceList = null;
 
+    // private String startupCallbackId = "";
+
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
         PluginResult.Status status = PluginResult.Status.OK;
@@ -137,6 +139,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                 pluginResult.setKeepCallback(true);
                 startupCallbackContext.sendPluginResult(pluginResult);
             } else if (action.equals("setEngine")) {
+                this.startupCallbackContext = callbackContext;
                 String engineName = args.getString(0);
                 state = SpeechSynthesis.INITIALIZING;
                 if (mTts != null) {
@@ -145,7 +148,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                 mTts = new TextToSpeech(cordova.getActivity().getApplicationContext(), this, engineName);
                 PluginResult pluginResult = new PluginResult(status, SpeechSynthesis.INITIALIZING);
                 pluginResult.setKeepCallback(true);
-                callbackContext.sendPluginResult(pluginResult);
+                startupCallbackContext.sendPluginResult(pluginResult);
             } else if (action.equals("shutdown")) {
                 if (mTts != null) {
                     mTts.shutdown();
@@ -251,7 +254,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
         }
         PluginResult result = new PluginResult(PluginResult.Status.OK, voices);
         result.setKeepCallback(false);
-        callbackContext.sendPluginResult(result);
+        startupCallbackContext.sendPluginResult(result);
         mTts.setOnUtteranceCompletedListener(this);
     }
 
@@ -293,8 +296,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
     public void onInit(int status) {
         if (mTts != null && status == TextToSpeech.SUCCESS) {
             state = SpeechSynthesis.STARTED;
-
-            getVoices(this.callbackContext);
+            getVoices(this.startupCallbackContext);
 
             // Putting this code in hear as a place holder. When everything moves to API
             // level 15 or greater
@@ -327,7 +329,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
             state = SpeechSynthesis.STOPPED;
             PluginResult result = new PluginResult(PluginResult.Status.ERROR, SpeechSynthesis.STOPPED);
             result.setKeepCallback(false);
-            this.callbackContext.sendPluginResult(result);
+            this.startupCallbackContext.sendPluginResult(result);
         }
     }
 
