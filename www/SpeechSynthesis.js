@@ -13,8 +13,10 @@ var SpeechSynthesis = function () {
 	this._engines = null;
 	var that = this;
 	var successCallback = function (data) {
-		//console.log(data);
+		console.log('succes callback ');
+		console.log(data);
 		that._voices = new SpeechSynthesisVoiceList(data);
+		console.log(this._voices);
 
 		// get all engines 
 		var successEnginesCallback = function (enginesData) {
@@ -28,6 +30,7 @@ var SpeechSynthesis = function () {
 		};
 		exec(successDefaultEngineCallback, null, "SpeechSynthesis", "getDefaultEngine", []);
 	};
+
 	exec(successCallback, null, "SpeechSynthesis", "startup", []);
 };
 
