@@ -80,10 +80,11 @@ SpeechSynthesis.prototype.getVoices = function () {
 	return this._voices;
 };
 
-SpeechSynthesis.prototype.setEngine = function (engineName) {
+SpeechSynthesis.prototype.setEngine = function (engineName, onReady) {
 	var that = this;
 	var setEngineSuccessCallback = function (data) {
 		that._voices = new SpeechSynthesisVoiceList(data);
+		onReady(data);
 	}
 	exec(setEngineSuccessCallback, null, "SpeechSynthesis", "setEngine", [engineName]);
 };
