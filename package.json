@@ -1,6 +1,6 @@
 {
   "name": "cboard-speech-tts",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Cordova TTS plugin used by the Cboard mobile app",
   "homepage": "https://github.com/cboard-org/cboard-speech-tts#readme",
   "scripts": {
@@ -16,9 +16,7 @@
   "cordova": {
     "id": "cboard-speech-tts",
     "platforms": [
-      "ios",
-      "android",
-      "browser"
+      "android"
     ]
   },
   "keywords": [
