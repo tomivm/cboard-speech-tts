@@ -39,6 +39,7 @@
   "license": "GPL-3.0-only",
   "dependencies": {
     "jasmine-node": "^3.0.0",
-    "pluginpub": "^0.0.9"
+    "pluginpub": "^0.0.9",
+    "properties-parser": "0.3.1"
   }
 }
