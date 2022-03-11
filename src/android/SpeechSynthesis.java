@@ -17,7 +17,7 @@ import android.os.Build;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
-import android.speech.tts.TextToSpeechService();
+import android.speech.tts.TextToSpeechService;
 import android.speech.tts.Voice;
 import android.util.Log;
 
@@ -25,7 +25,7 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
 
-public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, OnUtteranceCompletedListener {
+public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, OnUtteranceCompletedListener, TextToSpeechService {
 
     private static final String LOG_TAG = "TTS";
     private static final int STOPPED = 0;
