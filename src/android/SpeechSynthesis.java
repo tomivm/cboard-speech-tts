@@ -140,7 +140,6 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                 pluginResult.setKeepCallback(true);
                 startupCallbackContext.sendPluginResult(pluginResult);
             } else if (action.equals("setEngine")) {
-                try{
                 this.startupCallbackContext = callbackContext;
                 String engineName = args.getString(0);
                 state = SpeechSynthesis.INITIALIZING;
@@ -151,9 +150,6 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                 PluginResult pluginResult = new PluginResult(status, SpeechSynthesis.INITIALIZING);
                 pluginResult.setKeepCallback(true);
                 startupCallbackContext.sendPluginResult(pluginResult);
-                }catch(JSONException e) {
-                   callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION)); 
-                }
             } else if (action.equals("shutdown")) {
                 if (mTts != null) {
                     mTts.shutdown();
